@@ -14,7 +14,7 @@ const socketIo = require("socket.io");
 const pty = require("node-pty");
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 55000;
 
 const wss = new WebSocket.Server({ port: 3001 }); // WebSocket 서버 설정
 

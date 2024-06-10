@@ -19,7 +19,8 @@ const port = process.env.PORT || 55000;
 const wss = new WebSocket.Server({ port: 3001 }); // WebSocket 서버 설정
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "disk-image-recovery", "views"));
+
 
 app.use(express.static("public"));
 app.use(express.static(path.join(__dirname, "public")));

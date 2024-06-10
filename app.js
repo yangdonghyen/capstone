@@ -21,12 +21,10 @@ const wss = new WebSocket.Server({ port: 3001 }); // WebSocket 서버 설정
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "disk-image-recovery", "views"));
 
-
-app.use(express.static("public"));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "disk-image-recovery", "public")));
 app.use(
   "/predefined_images",
-  express.static(path.join(__dirname, "predefined_images"))
+  express.static(path.join(__dirname, "disk-image-recovery", "predefined_images"))
 );
 
 const storage = multer.diskStorage({

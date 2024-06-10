@@ -176,11 +176,10 @@ app.get("/recover/:id", async (req, res) => {
       uploadId,
       recoveredDir
     ) => {
-      const photorecPath = path.join(
-        "C:\\Users\\ddong\\OneDrive\\Desktop\\testdisk-7.2",
-        "photorec_win.exe"
-      );
-      const commandArgs = ["/log", "/d", outputDir, tempFilePath];
+      const photorecPath = path.join(__dirname, "tools", "photorec_static");
+    const outputDirEscaped = outputDir.replace(/\\/g, '\\\\');
+      const command = `"${photorecPath}" /log /d "${outputDirEscaped}" /cmd "${filepath.replace(/\\/g, '\\\\')}" search`;
+
 
       console.log("Executing command:", photorecPath, commandArgs);
 

@@ -342,19 +342,17 @@ app.get("/download/:uploadId/:filename", (req, res) => {
     }
   });
 });
-
-app.get("/home", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "home.html"));
-});
-
 app.get("/do", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "do.html"));
+  res.sendFile(path.join(__dirname, "disk-image-recovery", "public", "do.html"));
 });
 
-app.get("/portfolio", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "portfolio.html"));
+app.get("/tool", (req, res) => {
+  res.sendFile(path.join(__dirname, "disk-image-recovery", "public", "tool.html"));
 });
 
+app.get("/help", (req, res) => {
+  res.sendFile(path.join(__dirname, "disk-image-recovery", "public", "help.html"));
+});
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 });

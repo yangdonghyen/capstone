@@ -177,13 +177,12 @@ app.get("/recover/:id", async (req, res) => {
       recoveredDir
     ) => {
       const photorecPath = path.join(__dirname, "tools", "photorec_static");
-    const outputDirEscaped = outputDir.replace(/\\/g, '\\\\');
-      const command = `"${photorecPath}" /log /d "${outputDirEscaped}" /cmd "${filepath.replace(/\\/g, '\\\\')}" search`;
+      const outputDirEscaped = outputDir.replace(/\\/g, '\\\\');
+      const command = `"${photorecPath}" /log /d "${outputDirEscaped}" /cmd "${tempFilePath.replace(/\\/g, '\\\\')}" search`;
 
+      console.log("Executing command:", command);
 
-      console.log("Executing command:", photorecPath, commandArgs);
-
-      const child = spawn(photorecPath, commandArgs, { shell: true });
+      const child = spawn(command, { shell: true });
 
       let logData = "";
 

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recovery</title>
+  <!-- slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Poppins:400,700&display=swap" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="/css/style.css" rel="stylesheet">
+  <!-- responsive style -->
+  <link href="/css/responsive.css" rel="stylesheet">
+</head>
+<body>
+  <div class="hero_area">
+    <!-- header section starts -->
+    <header class="header_section">
+      <div class="container-f">
+        <nav class="navbar navbar-expand-lg custom_nav-container pt-3">
+          <a class="navbar-brand" href="/">
+            <span>Recovery</span>
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="d-flex ml-auto flex-column flex-lg-row align-items-center">
+              <ul class="navbar-nav">
+                <li class="nav-item active">
+                  <a class="nav-link" href="/">홈 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/recovery">데이터 복구</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/do">도구</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/portfolio">도움말</a>
+                </li>
+              </ul>
+              <div class="user_option">
+                <a href="">
+                  <img src="/images/user.png" alt="">
+                </a>
+                <form class="form-inline my-2 my-lg-0 ml-0 ml-lg-4 mb-3 mb-lg-0">
+                  <button class="btn my-2 my-sm-0 nav_search-btn" type="submit"></button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+
+    <div class="container">
+      <h2 class="upload">Upload a new file</h2>
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required />
+        <button type="submit">Upload</button>
+      </form>
+
+      <h2 class="upload">Uploaded Files</h2>
+      <ul>
+        <% uploads.forEach(function(upload) { %>
+        <li>
+          <%= upload.original_filename %>
+          <form action="/delete/<%= upload.id %>" method="post" style="display: inline">
+            <button type="submit">Delete</button>
+          </form>
+          <button class="recover-btn" onclick="recoverFile('<%= upload.id %>')">Recover</button>
+        </li>
+        <% }); %>
+      </ul>
+
+      <h2 class="upload">Recovered Files</h2>
+      <ul>
+        <% if (recoveredFiles && recoveredFiles.length) { %>
+        <% recoveredFiles.forEach(function(file) { %>
+        <li>
+          <%= file.filename %>
+          <a href="/download/<%= file.upload_id %>/<%= file.filename %>">Download</a>
+        </li>
+        <% }); %>
+        <% } else { %>
+        <li>No recovered files found.</li>
+        <% } %>
+      </ul>
+    </div>
+
+    <script>
+      function recoverFile(fileId) {
+        fetch(`/recover/${fileId}`, { method: "GET" })
+          .then((response) => {
+            if (!response.ok) {
+              console.error("Failed to recover file.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      const socket = new WebSocket("ws://localhost:3001");
+      let viewerWindow;
+
+      socket.onmessage = function (event) {
+        if (event.data === "open_viewer") {
+          viewerWindow = window.open("/viewer", "Viewer", "width=800,height=600");
+        }
+        if (event.data === "close" && viewerWindow) {
+          viewerWindow.close();
+        }
+      };
+    </script>
+  </div>
+</body>
+</html>
